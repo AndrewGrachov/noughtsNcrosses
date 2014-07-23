@@ -1,4 +1,4 @@
-noughtsNcrosses
+Noughts and Crosses
 ===============
-
-fun time
+simple as pitchfork.
+[Live](http://andrewgrachov.github.io/noughtsNcrosses/) version
