@@ -3,6 +3,8 @@ app.areaManager = (function () {
 
 	var game;
 	var $element;
+	var $saveButton;
+	var $loadButton;
 	var $backButton;
 	var $forwardButton;
 	var context;
@@ -26,6 +28,9 @@ app.areaManager = (function () {
 		context.moveTo(startPoint.x, startPoint.y);
 		context.lineTo(endPoint.x, endPoint.y);
 		context.stroke();
+
+		$forwardButton.toggleClass('hidden', false);
+		toastr.success(result.win + ' win');
 	}
 
 	function resolvePointFor(number) {
@@ -72,7 +77,10 @@ app.areaManager = (function () {
 	function declareElements() {
 		$element = $('#game-field');
 		$backButton = $('#back-button');
+		$newButton = $('#new-button');
 		$forwardButton = $('#forward-button');
+		$saveButton = $('#save-btn');
+		$loadButton = $('#load-btn');
 		$element.attr('width', 600);
 		$element.attr('height', 600);
 		context = $element[0].getContext('2d');
@@ -82,11 +90,41 @@ app.areaManager = (function () {
 		$element.off('click').on('click', addElement);
 		$backButton.on('click', back);
 		$forwardButton.on('click', forward);
+		$saveButton.off('click').on('click', save);
+		$loadButton.off('click').on('click', showLoadModal);
+		$newButton.click(newGame);
 	}
 
 	function back() {
 		var points = game.back();
 		areaManager.render(points);
+	}
+
+	function save() {
+		app.gameManager.save(game);
+		toastr.success('Saved');
+	}
+	function newGame() {
+		app.gameManager.newGame();
+		toastr.success('New game started!');
+	}
+
+	function showLoadModal() {		
+		var games = app.gameManager.getSavedGames();
+		var $games = $('<ul></ul>');
+		games.forEach(function (game) {
+			$games.append($('<li class="pointer">' + game + '</li>'));
+		});
+		$('.modal-body').html($games);
+		$games.find('li').click(load);
+		$('#modal').modal();
+	}
+
+	function load() {
+		$('#modal').modal('hide');
+		var id = $(this).text();
+		app.gameManager.load(id);
+		toastr.warning('loaded');
 	}
 
 	function forward() {
@@ -105,6 +143,10 @@ app.areaManager = (function () {
 			bindEvents();
 			areaManager.render(game.points);
 			game.on('win', win);
+			game.checkWinningCombos();
+			var ended = game.state === 'END_GAME';
+			$forwardButton.toggleClass('hidden', !ended);
+
 		},
 		render: function (elements) {
 			//iterate over config here

@@ -1,7 +1,7 @@
 var app = app || {};
 
 app.Game = (function () {
-	var winningCombos = [ // TEMPORARY
+	var winningCombos = [ //SIMPLICITY!
 		[1, 2, 3],
 		[4, 5, 6],
 		[7, 8, 9],
@@ -22,7 +22,7 @@ app.Game = (function () {
 		GAME_ENDED: 'GAME_ENDED'
 	}
 
-	function checkWinningCombos(points) { //todo: also temp
+	function checkWinningCombos(points) {
 		var nulls = points.filter(function(point) { return point.type === 'null'}).map(function (point) {
 			return point.square;
 		});
@@ -60,6 +60,8 @@ app.Game = (function () {
 	function Game(options) {
 		options = options || {};
 		this.points = options.points || [];
+		this.state = options.state || states.INITIAL;
+		this.uuid = options.uuid;
 		this._points = JSON.parse(JSON.stringify(this.points));
 		this._handlers = {};		
 	}
@@ -93,6 +95,9 @@ app.Game = (function () {
 
 	Game.prototype.back = function () {
 		this.points.pop();
+		if (this.state !== states.END_GAME) {
+			this._points.pop();
+		}
 
 		return this.points;		
 	}
@@ -128,6 +133,16 @@ app.Game = (function () {
 		this._handlers[eventName].forEach(function (handler) {
 			handler(data);
 		});
+	}
+
+	Game.prototype.toJSON = function() {
+		return JSON.stringify({points: this._points, state: this.state, uuid: this.uuid});
+	}
+	Game.prototype.checkWinningCombos = function () {
+		var result = checkWinningCombos(this.points);
+		if (result && result.win) {
+			this._win(result);
+		}
 	}
 
 	return Game;

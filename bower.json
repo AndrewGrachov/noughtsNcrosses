@@ -5,5 +5,9 @@
     "Andrew <DrontXL@yandex.ru>"
   ],
   "description": "fun game",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "toastr": "~2.0.3"
+  }
 }

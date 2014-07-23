@@ -2,17 +2,54 @@
 <html>
 	<head>
 		<script src="bower_components/jquery/dist/jquery.js"></script>
+		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="bower_components/toastr/toastr.js"></script>
 		<script src="js/game.js"></script>
 		<script src="js/areaManager.js"></script>
 		<script src="js/gameManager.js"></script>
 		<script src="js/index.js"></script>
 		<link rel="stylesheet" href="css/style.css"/>
+		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="bower_components/toastr/toastr.css"/>
 	</head>
 	<body>
-		<canvas width="500" height="500" id="game-field">
-		</canvas>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-2">
+					<div>
+						<button class="btn btn-success" id="save-btn">Save</button>
+					</div>
+					<div>
+						<button class="btn btn-info" id="load-btn">Load</button>
+					</div>
+					<div>
+						<button id="new-button" class="btn btn-warning">New</button>
+					</div>
+				</div>
+				<div class="col-xs-6"></div>
+					<canvas width="500" height="500" id="game-field">
+					</canvas>
+				<button id="back-button" class="btn btn-warning">Back</button>
+				<button id="forward-button" class="btn btn-success hidden">Forward</button>
 
-		<button id="back-button">Back</button>
-		<button id="forward-button">Forward</button>
+
+			</div>
+		</div>
+		<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">Saved Games</h4>
+						</div>
+					<div class="modal-body">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>						
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
